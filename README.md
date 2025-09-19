@@ -1,2 +1,240 @@
 # keke
 真心话大冒险
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <title>💖 魔法骰子真心话大冒险 💖</title>
+  <style>
+    body {
+      margin:0; padding:0;
+      height:100vh;
+      display:flex; flex-direction:column;
+      justify-content:center; align-items:center;
+      overflow:hidden;
+      font-family:"Comic Sans MS","幼圆",cursive;
+      background: linear-gradient(135deg,#ffe6f9,#ffc0dd,#ffe0f0);
+      position: relative;
+    }
+    h1 {
+      font-size:38px; color:#ff66cc;
+      text-shadow:2px 2px #fff,0 0 12px #ff99ff;
+      margin:20px 0;
+      animation: titleGlow 2s infinite alternate;
+    }
+    @keyframes titleGlow {
+      0% { text-shadow:2px 2px #fff,0 0 12px #ff99ff; }
+      100% { text-shadow:2px 2px #fff,0 0 25px #ff66cc,0 0 50px #ff99ff; }
+    }
+    .card {
+      position:relative; z-index:10;
+      background:rgba(255,255,255,0.35);
+      border-radius:30px; padding:40px 30px;
+      width:380px; min-height:260px;
+      display:flex; flex-direction:column;
+      justify-content:space-between; align-items:center;
+      backdrop-filter: blur(12px);
+      box-shadow:0 8px 30px rgba(255,182,255,0.6);
+      animation: floatCard 3s ease-in-out infinite;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    @keyframes floatCard {
+      0%,100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+    }
+    .result {
+      margin-top:25px;
+      font-size:18px; font-weight:bold;
+      color:#ff4da6;
+      min-height:90px;
+      display:flex; justify-content:center; align-items:center;
+      text-align:center; padding:12px;
+      border-radius:20px;
+      background: rgba(255,240,255,0.6);
+      box-shadow: inset 0 0 12px rgba(255,182,255,0.8);
+      transition: all 0.3s ease;
+    }
+    button {
+      padding:14px 24px; margin:12px; font-size:18px;
+      cursor:pointer; border-radius:50px; border:none;
+      background: linear-gradient(135deg,#ffb3e6,#ff66cc,#ff99ff);
+      color:white; font-weight:bold; transition:0.3s;
+      box-shadow:0 0 12px rgba(255,105,180,0.8);
+    }
+    button:hover {
+      transform: scale(1.2) rotate(3deg);
+      box-shadow:0 0 25px #ffb3e6,0 0 35px #ff66cc,0 0 45px #ff99ff;
+    }
+    .bubble, .petal {
+      position:absolute; border-radius:50%;
+      opacity:0.6; animation: floatBubble linear infinite;
+    }
+    @keyframes floatBubble {
+      0% { transform: translateY(0) scale(0.8); opacity:0.3; }
+      50% { opacity:1; }
+      100% { transform: translateY(-100vh) scale(1.2); opacity:0; }
+    }
+    .unicorn {
+      font-size:60px; animation: sparkle 2s infinite;
+      text-shadow: 0 0 8px #fff,0 0 20px #ff99ff,0 0 30px #ff66cc;
+      margin-bottom:15px;
+    }
+    @keyframes sparkle {
+      0%,100% { text-shadow:0 0 8px #fff,0 0 20px #ff99ff,0 0 30px #ff66cc; }
+      50% { text-shadow:0 0 15px #ffe6f9,0 0 30px #ff99ff,0 0 50px #ff66cc; }
+    }
+  </style>
+</head>
+<body>
+  <h1>🦄✨ 魔法骰子真心话大冒险 ✨🦄</h1>
+  <div class="card" id="card">
+    <div class="unicorn">🦄</div>
+    <div class="buttons">
+      <button onclick="rollDice()">🎲 魔法骰子</button>
+    </div>
+    <div class="result" id="result">点按钮释放魔法吧！✨</div>
+  </div>
+   <audio id="myAudio" src="index.mp3" controls></audio>
+
+  <script>
+    // 漂浮光点/花瓣
+    for(let i=0;i<40;i++){
+      let bubble=document.createElement('div');
+      bubble.className='bubble';
+      bubble.style.width=(Math.random()*10+5)+'px';
+      bubble.style.height=bubble.style.width;
+      bubble.style.left=Math.random()*100+'vw';
+      bubble.style.top=Math.random()*100+'vh';
+      bubble.style.background='rgba(255,'+Math.floor(150+Math.random()*100)+',255,0.6)';
+      bubble.style.animationDuration=(5+Math.random()*10)+'s';
+      document.body.appendChild(bubble);
+
+      let petal=document.createElement('div');
+      petal.className='petal';
+      petal.style.width='6px'; petal.style.height='6px';
+      petal.style.background='pink';
+      petal.style.left=Math.random()*100+'vw';
+      petal.style.top=Math.random()*100+'vh';
+      petal.style.animationDuration=(4+Math.random()*8)+'s';
+      document.body.appendChild(petal);
+    }
+
+    // 真心话列表（稍后补全）
+    const truths=[
+  "说出你暗恋的人 💌",
+  "讲一个最尴尬经历 🙈",
+  "你偷偷看过别人手机吗 📱",
+  "说出最怕失去的人 😢",
+  "你撒过最大的谎 🤫",
+  "说出自己最奇怪的习惯 🤪",
+  "说出最喜欢的零食 🍪",
+  "你有过最疯狂的梦 💤",
+  "有没有偷偷喜欢过朋友 😳",
+  "你最怕被谁发现秘密 😱",
+  "最尴尬的童年经历 🤭",
+  "说出最喜欢的颜色 🌈",
+  "有没有偷偷笑过老师 😂",
+  "做过最勇敢的事情 💪",
+  "有没有暗中做过好事 🌸",
+  "最喜欢的动漫角色 🎀",
+  "你最想去的地方 🏖️",
+  "说出最近的小幸运 🍀",
+  "有没有偷偷吃过零食 🤫",
+  "你最害怕的事情 😨",
+  "说出最搞笑的糗事 🤡",
+  "最想见的人是谁 ❤️",
+  "你有过最奇怪的昵称吗 😆",
+  "说出最难忘的生日 🎂",
+  "最想学习的新技能 📝",
+  "有没有偷偷收集东西 🐾",
+  "说出自己最不擅长的事情 🙃",
+  "最喜欢的季节 🍃❄️☀️",
+  "有没有偷偷写过日记 📖",
+  "最喜欢的甜品 🍰"
+];
+
+    // 大冒险列表（稍后补全）
+    const dares=[
+  "在群里发一条搞笑状态 😂",
+  "打电话给好久没联系的朋友 📞",
+  "用搞怪语音发消息 🎤",
+  "朋友圈发搞怪自拍 🤳",
+  "模仿动物叫声或动作 1 分钟 🐒",
+  "做 20 个俯卧撑或跳绳 30 下 🏋️",
+  "改联系人名字为搞笑称号 ✍️",
+  "给胜利者写诗或检讨文 ✒️",
+  "吃一口奇怪组合食物 🍕",
+  "在公共场合大喊‘我爱XXX’ 💘",
+  "别人叫你名字用搞笑称号 🤡",
+  "衣服/帽子反穿 10 分钟 👕",
+  "连续三天发早安/晚安 🌞🌙",
+  "做一个鬼脸坚持5秒 😜",
+  "用指定搞怪口音说3句话 🗣️",
+  "在群里发一个搞笑表情包 😆",
+  "用左手写字/画画 3 分钟 ✍️",
+  "给朋友发一段搞笑语音 🎙️",
+  "模仿老师/老板讲话 30 秒 🧑‍🏫",
+  "在群里@三个人说一句搞笑话 😹",
+  "按指定顺序跳舞 10 秒 💃",
+  "用夸张表情拍一张自拍 🤳",
+  "做一次纸飞机比赛，失败的人受罚 🛩️",
+  "给自己起一个搞怪昵称 1 小时 🐥",
+  "模仿动画角色说一句台词 🐰",
+  "用袜子当手套做怪动作 30 秒 🧦",
+  "做一次搞怪魔法动作表演 ✨",
+  "用鼻子夹住笔写 5 个字 ✏️",
+  "模仿你宠物的叫声 20 秒 🐶",
+  "用手指画出一个搞笑脸 😆",
+  "在朋友圈/状态发一句搞怪金句 📝",
+  "挑战一分钟内连续眨眼 20 次 👀",
+  "对镜子自夸 30 秒 😎",
+  "模仿喜欢的明星跳舞 10 秒 💃",
+  "把头发或帽子戴成奇怪造型 🎩",
+  "用搞怪声音唱一首歌 🎤",
+  "站在原地做搞笑动作 20 秒 🕺",
+  "讲一个冷笑话给大家听 🤣",
+  "以动物步态走路 15 秒 🐾",
+  "给自己画一个可爱搞怪妆 💄",
+  "做三次深蹲 + 大喊口号 🏋️",
+  "用手机拍一张搞笑微距照片 📸",
+  "画一张奇怪表情画 🎨",
+  "用手指做指偶演一小段故事 🖐️",
+  "模仿朋友说话 15 秒 🗣️",
+  "拿一个杯子当帽子戴 10 秒 🥤",
+  "做一次跳房子动作表演 🏃‍♀️",
+  "模仿鸟叫 20 秒 🐦",
+  "用纸做一个搞笑帽子戴 1 分钟 🎩",
+  "给朋友讲一个自己尴尬经历 😳",
+  "用手指模拟乐器演奏 15 秒 🎹",
+  "拍一个搞笑短视频发群里 📹",
+  "模仿食物的动作或表情 20 秒 🍉",
+  "做一次创意魔法动作表演 ✨",
+  "用手指写一段搞怪文字在桌面上 📝"
+];
+
+
+    function rollDice(){
+
+      const card=document.getElementById('card');
+      const result=document.getElementById('result');
+      // 魔法骰子动画
+      card.style.transform='rotate('+(Math.random()*60-30)+'deg) scale(1.1)';
+      card.style.boxShadow='0 0 50px #ff99ff,0 0 70px #ff66cc,0 0 90px #ffb3e6';
+      setTimeout(()=>{
+        card.style.transform='rotate(0deg) scale(1)';
+        card.style.boxShadow='0 8px 30px rgba(255,182,255,0.6)';
+        const type=Math.random()<0.5?'truth':'dare';
+        const arr=type==='truth'?truths:dares;
+        if(arr.length===0){
+          result.innerText="列表还没加载完哦~";
+          return;
+        }
+        const idx=Math.floor(Math.random()*arr.length);
+        result.innerText=(type==='truth'?'💖 真心话: ':'🔥 大冒险: ')+arr[idx];
+      },700);
+    }
+
+
+  </script>
+</body>
+</html>
